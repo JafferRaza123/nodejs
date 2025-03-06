@@ -1,0 +1,61 @@
+name: CI/CD Pipeline for Node.js with Docker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and test application
+        run: |
+          npm run build
+          npm test
+
+  docker:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ SECRETS_DOCKER_USERNAME }}
+          password: ${{ SECRETS_DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ SECRETS_DOCKER_USERNAME }}/node-app:latest .
+          docker push ${{ SECRETS_DOCKER_USERNAME }}/node-app:latest
+
+  deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Remote Server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ SECRETS_REMOTE_HOST }}
+          username: ${{ SECRETS_REMOTE_USER }}
+          key: ${{ SECRETS_SSH_PRIVATE_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/node-app:latest
+            docker-compose up -d --force-recreate
