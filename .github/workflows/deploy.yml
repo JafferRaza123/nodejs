@@ -53,9 +53,9 @@ jobs:
       - name: Deploy to Remote Server
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: ${{ SECRETS_REMOTE_HOST }}
-          username: ${{ SECRETS_REMOTE_USER }}
-          key: ${{ SECRETS_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.SECRETS_REMOTE_HOST }}
+          username: ${{ secrets.SECRETS_REMOTE_USER }}
+          key: ${{ secrets.SECRETS_SSH_PRIVATE_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/node-app:latest
             docker-compose up -d --force-recreate
