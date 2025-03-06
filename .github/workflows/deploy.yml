@@ -38,13 +38,13 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ SECRETS_DOCKER_USERNAME }}
-          password: ${{ SECRETS_DOCKER_PASSWORD }}
+          username: ${{ secrets.SECRETS_DOCKER_USERNAME }}
+          password: ${{ secrets.SECRETS_DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ SECRETS_DOCKER_USERNAME }}/node-app:latest .
-          docker push ${{ SECRETS_DOCKER_USERNAME }}/node-app:latest
+          docker build -t ${{ secrets.SECRETS_DOCKER_USERNAME }}/node-app:latest .
+          docker push ${{ secrets.SECRETS_DOCKER_USERNAME }}/node-app:latest
 
   deploy:
     needs: docker
