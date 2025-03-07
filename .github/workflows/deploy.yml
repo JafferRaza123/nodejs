@@ -49,12 +49,7 @@ jobs:
   deploy:
     needs: docker
     runs-on: ubuntu-latest
-    steps:
-       if [ ! -d "/home/***/newnodejs/.git" ]; then
-            rm -rf /home/***/newnodejs
-            git clone https://github.com/JafferRaza123/nodejs.git /home/***/newnodejs
-          fi
-          cd /home/***/newnodejs
-          git pull origin main
-          docker-compose down -v
+        script: |
+          cd /home/ubuntu/app  # Change to the correct directory
+          docker pull ${{ secrets.DOCKER_USERNAME }}/node-app:latest
           docker-compose up -d --force-recreate
