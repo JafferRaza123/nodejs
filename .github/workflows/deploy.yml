@@ -47,17 +47,17 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/node-app:latest
 
   deploy:
-  needs: docker
-  runs-on: ubuntu-latest
-  steps:
-    - name: Deploy to Remote Server
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: ${{ secrets.REMOTE_HOST }}
-        username: ${{ secrets.REMOTE_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /home/ # Change to the correct directory
-          docker pull ${{ secrets.DOCKER_USERNAME }}/node-app:latest
-          docker-compose up -d --force-recreate
-
+    needs: docker  # Fix indentation issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Remote Server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/***/newnodejs
+            git pull origin main
+            docker pull ${{ secrets.DOCKER_USERNAME }}/node-app:latest
+            docker-compose up -d --force-recreate
