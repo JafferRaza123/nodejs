@@ -57,6 +57,6 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_NPRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/nodejsaplication
+            cd /home/ubuntu/newnodejs
             docker pull ${{ secrets.DOCKER_USERNAME }}/node-app:latest
             docker-compose up -d --force-recreate
