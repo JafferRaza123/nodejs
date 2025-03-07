@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-  res.send("Hello, World! Welcome to my Node.js App running on Docker Compose.");
+  res.send("Hello, World! Welcome to my Node.js App running on Docker Compose is down.");
 });
 
 app.listen(port, () => {
