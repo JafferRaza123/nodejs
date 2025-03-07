@@ -50,13 +50,11 @@ jobs:
     needs: docker
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Remote Server
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_NPRIVATE_KEY }}
-          script: |
-            cd /home/ubuntu/newnodejs
-            docker pull ${{ secrets.DOCKER_USERNAME }}/node-app:latest
-            docker-compose up -d --force-recreate
+       if [ ! -d "/home/***/newnodejs/.git" ]; then
+            rm -rf /home/***/newnodejs
+            git clone https://github.com/JafferRaza123/nodejs.git /home/***/newnodejs
+          fi
+          cd /home/***/newnodejs
+          git pull origin main
+          docker-compose down -v
+          docker-compose up -d --force-recreate
