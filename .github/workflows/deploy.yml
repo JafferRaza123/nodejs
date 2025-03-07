@@ -57,7 +57,7 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_NPRIVATE_KEY }}
           script: |
-            cd /home/***/newnodejs
-            git pull origin main
             docker pull ${{ secrets.DOCKER_USERNAME }}/node-app:latest
-            docker-compose up -d --force-recreate
+            docker stop node-app || true
+            docker rm node-app || true
+            docker run -d --name node-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/node-app:latest
